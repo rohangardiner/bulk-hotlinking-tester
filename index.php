@@ -58,9 +58,30 @@
             
             // create tab data section
             foreach($urlsarray as $value){
+                // create a tab
                 if ($value!="") {
+                    // give tab a name/ID
                     print "<div id=\"$value\" class=\"tabcontent\">";
-                    print "<p>This is the content in the tab for $value.</p>";
+                    
+                    // Prepare query for this domain
+                    $html = file_get_contents("https://www.google.com/search?q=inurl:$value+-site:$value&hl=en&tbm=isch");
+                    $dom = new domDocument;
+                    libxml_use_internal_errors (true);
+                    $dom->loadHTML($html);
+                    //$images = $dom->getElementsByTagName('img');
+                    $images = $dom->getElementsByTagName('a');
+                    
+                    // #todo: Remove Google.com URLs
+                    // #todo: Trim urls so they start with http
+                    // #todo: Decode Google Images URLs
+                    // #todo: Flexbox of images with a link result, similar to Google Images results
+                    
+                    foreach($images as $image){
+                        //$img = $image->getAttribute('src');
+                        $img = $image->getAttribute('href');
+                        echo $img."</br>";
+                    }
+                    
                     print "</div>";
                 }
             }
